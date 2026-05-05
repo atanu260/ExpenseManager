@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ExpenseManager.API/ExpenseManager.API.csproj" />
+  <Project Path="ExpenseManager.Core/ExpenseManager.Core.csproj" />
+  <Project Path="ExpenseManager.Infrastructure/ExpenseManager.Infrastructure.csproj" />
+</Solution>

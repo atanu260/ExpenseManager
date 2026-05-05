@@ -1,0 +1,52 @@
+ <aside class="sidebar" [class.collapsed]="collapsed">
+      <!-- Logo -->
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <mat-icon>account_balance_wallet</mat-icon>
+        </div>
+        <span class="logo-text" *ngIf="!collapsed">ExpenseIQ</span>
+        <button class="collapse-btn" (click)="toggleSidebar.emit()">
+          <mat-icon>{{ collapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+        </button>
+      </div>
+
+      <!-- User Info -->
+      <div class="sidebar-user" *ngIf="!collapsed">
+        <div class="user-avatar">
+          {{ userInitials }}
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ auth.currentUser()?.fullName }}</div>
+          <div class="user-email">{{ auth.currentUser()?.email }}</div>
+        </div>
+      </div>
+      <div class="sidebar-user-mini" *ngIf="collapsed">
+        <div class="user-avatar-mini" [matTooltip]="auth.currentUser()?.fullName || ''">
+          {{ userInitials }}
+        </div>
+      </div>
+
+      <!-- Nav Items -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label" *ngIf="!collapsed">MAIN MENU</div>
+        <a *ngFor="let item of navItems"
+           [routerLink]="item.route"
+           routerLinkActive="active"
+           class="nav-item"
+           [matTooltip]="collapsed ? item.label : ''"
+           matTooltipPosition="right">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span *ngIf="!collapsed">{{ item.label }}</span>
+        </a>
+      </nav>
+
+      <!-- Logout -->
+      <div class="sidebar-footer">
+        <button class="nav-item logout-btn" (click)="auth.logout()"
+                [matTooltip]="collapsed ? 'Logout' : ''" matTooltipPosition="right">
+          <mat-icon>logout</mat-icon>
+          <span *ngIf="!collapsed">Logout</span>
+        </button>
+      </div>
+    </aside>
+

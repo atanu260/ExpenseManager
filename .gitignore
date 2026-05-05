@@ -1,0 +1,82 @@
+# Visual Studio
+.vs/
+.vslogs/
+
+# Build results
+bin/
+obj/
+Debug/
+DebugPublic/
+Release/
+Releases/
+x64/
+x86/
+
+bld/
+log/
+logs/
+
+# Visual Studio user-specific files
+*.csproj.user
+*.sln.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+project.lock.json
+project.assets.json
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Test Results
+TestResults/
+*.trx
+*.coverage
+.coverage
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Application Insights
+ApplicationInsights.config
+
+# Environment files
+.env
+.env.local
+appsettings.*.json
+!appsettings.json
+
+# Azure
+PublishSettings/
+*.azurewebsites.net.publish.xml
+*.pubxml
+*.publishproj
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride

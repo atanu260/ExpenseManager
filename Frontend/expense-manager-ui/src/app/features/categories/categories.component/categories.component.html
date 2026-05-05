@@ -1,0 +1,88 @@
+<div class="categories-page fade-in">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Categories</h1>
+      <p class="page-subtitle">Organize your transactions with custom categories</p>
+    </div>
+    <button class="btn-primary" (click)="openForm()">
+      <mat-icon>add</mat-icon> New Category
+    </button>
+  </div>
+
+  <div class="categories-sections">
+    <div class="section-block" *ngFor="let type of ['Expense', 'Income']">
+      <div class="section-header">
+        <div class="section-dot" [style.background]="type === 'Expense' ? '#ef4444' : '#10b981'"></div>
+        <h3>{{ type }} Categories</h3>
+        <span class="section-count">{{ getCategoriesByType(type).length }}</span>
+      </div>
+      <div class="categories-grid">
+        <div class="category-card em-card" *ngFor="let cat of getCategoriesByType(type)">
+          <div class="cat-icon-large" [style.background]="cat.color + '20'">
+            <mat-icon [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+          </div>
+          <div class="cat-info">
+            <div class="cat-name">{{ cat.name }}</div>
+            <div class="cat-badge" [style.background]="cat.color + '20'" [style.color]="cat.color">{{ cat.type }}</div>
+          </div>
+          <div class="cat-actions" *ngIf="!cat.isDefault">
+            <button class="icon-btn edit" (click)="editCategory(cat)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="icon-btn delete" (click)="deleteCategory(cat.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div class="default-badge" *ngIf="cat.isDefault">System</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editingId ? 'Edit' : 'Add' }} Category</h3>
+        <button class="close-btn" (click)="closeForm()"><mat-icon>close</mat-icon></button>
+      </div>
+      <form [formGroup]="catForm" (ngSubmit)="saveCategory()" style="padding: 24px">
+        <div class="form-group" style="margin-bottom:16px">
+          <label>Name *</label>
+          <div class="input-wrapper">
+            <mat-icon>label</mat-icon>
+            <input formControlName="name" placeholder="Category name" />
+          </div>
+        </div>
+        <div class="type-toggle" style="margin-bottom:16px">
+          <button type="button" [class.active-income]="catForm.get('type')?.value === 'Income'"
+                  (click)="catForm.patchValue({type:'Income'})">
+            <mat-icon>trending_up</mat-icon> Income
+          </button>
+          <button type="button" [class.active-expense]="catForm.get('type')?.value === 'Expense'"
+                  (click)="catForm.patchValue({type:'Expense'})">
+            <mat-icon>trending_down</mat-icon> Expense
+          </button>
+        </div>
+        <div class="form-group" style="margin-bottom:16px">
+          <label>Color</label>
+          <div style="display:flex;align-items:center;gap:12px">
+            <input type="color" formControlName="color" style="width:48px;height:40px;border:none;cursor:pointer;border-radius:8px" />
+            <span>{{ catForm.get('color')?.value }}</span>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:24px">
+          <label>Icon (Material Icon Name)</label>
+          <div class="input-wrapper">
+            <mat-icon [style.color]="catForm.get('color')?.value">{{ catForm.get('icon')?.value }}</mat-icon>
+            <input formControlName="icon" placeholder="e.g. restaurant, shopping_cart" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="closeForm()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="catForm.invalid">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

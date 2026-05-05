@@ -1,0 +1,9 @@
+<div class="shell-layout" [class.sidebar-collapsed]="sidebarCollapsed()">
+    <app-sidebar (toggleSidebar)="sidebarCollapsed.set(!sidebarCollapsed())" [collapsed]="sidebarCollapsed()" />
+    <div class="main-content">
+        <app-header (toggleSidebar)="sidebarCollapsed.set(!sidebarCollapsed())" />
+        <div class="page-content">
+            <router-outlet />
+        </div>
+    </div>
+</div>

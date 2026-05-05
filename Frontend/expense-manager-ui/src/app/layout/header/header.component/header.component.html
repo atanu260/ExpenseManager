@@ -1,0 +1,66 @@
+<header class="header">
+  <div class="header-left">
+    <button 
+      class="menu-toggle" 
+      mat-icon-button 
+      (click)="toggleSidebar.emit()" 
+      matTooltip="Toggle Sidebar">
+      <mat-icon>{{ collapsed ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+    <div class="header-title">
+      <h2>ExpenseIQ</h2>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <!-- Search -->
+    <div class="search-container">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Search..." class="search-input">
+    </div>
+
+    <!-- Notifications -->
+    <button mat-icon-button class="notification-btn" matTooltip="Notifications">
+      <mat-icon>notifications</mat-icon>
+      <span class="notification-badge">3</span>
+    </button>
+
+    <!-- Settings -->
+    <button mat-icon-button matTooltip="Settings">
+      <mat-icon>settings</mat-icon>
+    </button>
+
+    <!-- User Menu -->
+    <button 
+      mat-icon-button 
+      [matMenuTriggerFor]="userMenu" 
+      class="user-menu-btn"
+      matTooltip="User Menu">
+      <div class="user-avatar">{{ userInitials }}</div>
+    </button>
+  </div>
+
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item disabled class="user-email">
+      <span>{{ auth.currentUser()?.email }}</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>Settings</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>help</mat-icon>
+      <span>Help</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</header>
