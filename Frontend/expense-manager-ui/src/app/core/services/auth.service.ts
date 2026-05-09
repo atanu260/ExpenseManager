@@ -6,7 +6,7 @@ import { AuthResponse, User } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API = 'http://localhost:5000/api/auth';
+  private readonly API = 'https://localhost:7045/api/auth';
   private http   = inject(HttpClient);
   private router = inject(Router);
 

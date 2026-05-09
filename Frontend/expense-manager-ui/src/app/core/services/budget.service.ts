@@ -5,7 +5,7 @@ import { Budget } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class BudgetService {
-  private readonly API = 'http://localhost:5000/api/budgets';
+  private readonly API = 'https://localhost:7045/api/budgets';
   private http = inject(HttpClient);
 
   getAll(): Observable<Budget[]> {
