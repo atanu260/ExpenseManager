@@ -1,0 +1,108 @@
+// ─── Filters ──────────────────────────────────────────────
+.filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+}
+
+.filter-search {
+  display: flex; align-items: center; gap: 8px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; background: #fafafa; flex: 1; min-width: 180px;
+  mat-icon { font-size: 17px; color: var(--text-secondary); }
+  input { border: none; background: transparent; outline: none; font-size: 13px; font-family: 'Inter', sans-serif; flex: 1; }
+}
+
+.filter-select {
+  border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 9px 10px; font-size: 13px; font-family: 'Inter', sans-serif;
+  background: #fff; outline: none; cursor: pointer;
+}
+
+.clear-btn {
+  display: flex; align-items: center; gap: 4px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; background: #fff; cursor: pointer;
+  font-size: 13px; font-family: 'Inter', sans-serif; color: var(--text-secondary);
+  transition: all 0.2s;
+  mat-icon { font-size: 16px; }
+  &:hover { background: #f1f5f9; }
+}
+
+// ─── Table ────────────────────────────────────────────────
+.table-card { padding: 0; overflow: hidden; }
+
+.table-loading {
+  display: flex; justify-content: center; align-items: center;
+  padding: 64px;
+}
+
+.table-wrap { overflow-x: auto; }
+
+.tx-table {
+  width: 100%; border-collapse: collapse;
+
+  thead tr { background: #f8fafc; }
+
+  th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #f8fafc;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .tx-row:hover { background: #fafbff; }
+}
+
+.cat-cell {
+  display: flex; align-items: center; gap: 10px; white-space: nowrap;
+}
+
+.cat-ico {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  mat-icon { font-size: 18px; }
+}
+
+.desc-cell { color: var(--text-secondary); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pay-badge {
+  background: #f1f5f9; padding: 3px 9px;
+  border-radius: 6px; font-size: 11px; font-weight: 500;
+}
+
+.action-group { display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+// ─── Pagination ───────────────────────────────────────────
+.pagination {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  padding: 16px; border-top: 1px solid var(--border);
+
+  button {
+    background: #fff; border: 1.5px solid var(--border); border-radius: 8px;
+    cursor: pointer; padding: 7px; display: flex; align-items: center;
+    transition: all 0.2s;
+    mat-icon { font-size: 18px; }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:not(:disabled):hover { background: #f1f5f9; }
+  }
+
+  span { font-size: 13px; font-weight: 500; }
+}
+
+// ─── Modal shared (overrides) ─────────────────────────────
+.mb-20 { margin-bottom: 20px; }

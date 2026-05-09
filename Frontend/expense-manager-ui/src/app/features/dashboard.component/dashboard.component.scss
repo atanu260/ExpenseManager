@@ -1,0 +1,151 @@
+.dashboard { max-width: 1400px; }
+
+// ─── Stats ────────────────────────────────────────────────
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(2,1fr); }
+  @media (max-width: 600px)  { grid-template-columns: 1fr; }
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.25s;
+  &:hover { box-shadow: var(--shadow); }
+}
+
+.stat-icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+  mat-icon { font-size: 22px; color: #fff; }
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 10px;
+  mat-icon { font-size: 14px; }
+  &.positive { color: #059669; }
+  &.negative { color: #dc2626; }
+}
+
+// ─── Charts ───────────────────────────────────────────────
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+  @media (max-width: 1000px) { grid-template-columns: 1fr; }
+}
+
+.chart-card {
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    h3 { font-size: 15px; font-weight: 600; }
+  }
+  &.small .card-header { margin-bottom: 12px; }
+}
+
+.chart-area    { height: 230px; position: relative; }
+.donut-area    { height: 160px; }
+
+.chip {
+  font-size: 11px;
+  background: #f1f5f9;
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.cat-legend { margin-top: 14px; }
+.legend-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  .legend-dot  { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .legend-name { flex: 1; font-size: 12px; color: var(--text-secondary); }
+  .legend-pct  { font-size: 12px; font-weight: 600; }
+}
+
+// ─── Bottom Row ───────────────────────────────────────────
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.card-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+  h3 { font-size: 15px; font-weight: 600; }
+}
+.view-all { font-size: 13px; color: var(--primary); text-decoration: none; font-weight: 600; }
+
+// ─── Transactions List ────────────────────────────────────
+.tx-list { display: flex; flex-direction: column; }
+
+.tx-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid #f8fafc;
+  &:last-child { border: none; }
+}
+
+.tx-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  mat-icon { font-size: 20px; }
+}
+
+.tx-info {
+  flex: 1; min-width: 0;
+  .tx-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tx-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+}
+
+// ─── Budget Status ────────────────────────────────────────
+.budget-status-list { display: flex; flex-direction: column; gap: 16px; }
+
+.bs-item { display: flex; flex-direction: column; gap: 6px; }
+.bs-row  { display: flex; align-items: center; justify-content: space-between; }
+.bs-name { font-size: 13px; font-weight: 600; }
+.bs-amounts { font-size: 12px; }
+
+// ─── Misc ─────────────────────────────────────────────────
+.month-select {
+  border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 9px 12px; font-size: 13px; font-family: 'Inter', sans-serif;
+  background: #fff; outline: none; cursor: pointer;
+}
+
+.centered-spinner {
+  display: flex; justify-content: center; align-items: center;
+  min-height: 400px;
+}
+
+.mt-8 { margin-top: 8px; }

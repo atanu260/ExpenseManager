@@ -1,0 +1,205 @@
+<div class="savings-page fade-in">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Savings Goals</h1>
+      <p class="page-subtitle">Plan your future, one goal at a time</p>
+    </div>
+    <button class="btn-primary" (click)="showForm.set(true)">
+      <mat-icon>add</mat-icon> New Goal
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="centered-spinner"><mat-spinner diameter="40" /></div>
+  } @else {
+    <div class="goals-grid">
+
+      @for (g of goals(); track g.id) {
+        @let progress = progressOf(g);
+        @let days = daysLeft(g);
+
+        <div class="goal-card em-card" [class.completed]="g.isCompleted">
+
+          <!-- Card Top -->
+          <div class="goal-top">
+            <div class="goal-icon" [style.background]="g.color + '22'">
+              <mat-icon [style.color]="g.color">{{ g.icon }}</mat-icon>
+            </div>
+            <div class="goal-info">
+              <h4>{{ g.name }}</h4>
+              @if (g.isCompleted) {
+                <span class="completed-chip">
+                  <mat-icon>check_circle</mat-icon> Completed!
+                </span>
+              } @else {
+                <span class="days-chip">{{ days }} days left</span>
+              }
+            </div>
+            <button class="icon-btn delete" (click)="deleteGoal(g.id)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+
+          <!-- Amounts -->
+          <div class="goal-amounts">
+            <div>
+              <div class="goal-current">{{ g.currentAmount | currency:currency() }}</div>
+              <div class="goal-lbl">Saved</div>
+            </div>
+            <div class="goal-sep">/</div>
+            <div>
+              <div class="goal-target">{{ g.targetAmount | currency:currency() }}</div>
+              <div class="goal-lbl">Goal</div>
+            </div>
+            <div class="goal-pct-wrap">
+              <div class="goal-pct" [style.color]="g.color">{{ progress | number:'1.0-0' }}%</div>
+              <div class="goal-lbl">Done</div>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar-fill"
+                 [style.background]="'linear-gradient(90deg,' + g.color + ', ' + g.color + 'aa)'"
+                 [style.width.%]="progress">
+            </div>
+          </div>
+
+          <!-- Target Date -->
+          <div class="goal-date">
+            <mat-icon>event</mat-icon>
+            Target: {{ g.targetDate | date:'MMM d, y' }}
+          </div>
+
+          <!-- Add Funds -->
+          @if (!g.isCompleted) {
+            @if (addingFundsId() === g.id) {
+              <div class="add-funds-form">
+                <div class="input-wrapper">
+                  <mat-icon>attach_money</mat-icon>
+                  <input type="number" [formControl]="$any(fundsForm.get('amount'))"
+                         placeholder="Amount to add" min="0.01" step="0.01" />
+                </div>
+                <div class="funds-actions">
+                  <button class="btn-cancel" (click)="addingFundsId.set(null)">Cancel</button>
+                  <button class="btn-add-funds" [style.background]="g.color"
+                          (click)="addFunds(g.id)"
+                          [disabled]="fundsForm.invalid">
+                    <mat-icon>add</mat-icon> Add
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <button class="add-funds-btn" [style.border-color]="g.color" [style.color]="g.color"
+                      (click)="addingFundsId.set(g.id); fundsForm.reset()">
+                <mat-icon>add_circle_outline</mat-icon> Add Funds
+              </button>
+            }
+          }
+
+        </div>
+      }
+
+      <!-- Add Card -->
+      <div class="add-goal-card" (click)="showForm.set(true)">
+        <mat-icon>add_circle_outline</mat-icon>
+        <p>New Savings Goal</p>
+      </div>
+
+    </div>
+  }
+
+  <!-- Create Modal -->
+  @if (showForm()) {
+    <div class="modal-overlay" (click)="showForm.set(false)">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Create Savings Goal</h3>
+          <button class="close-btn" (click)="showForm.set(false)"><mat-icon>close</mat-icon></button>
+        </div>
+
+        <div class="modal-body">
+          <form [formGroup]="form" (ngSubmit)="saveGoal()">
+
+            <div class="form-grid">
+
+              <div class="form-group full-width">
+                <label>Goal Name *</label>
+                <div class="input-wrapper">
+                  <mat-icon>label</mat-icon>
+                  <input formControlName="name" placeholder="e.g. Buy a Car" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Target Amount *</label>
+                <div class="input-wrapper">
+                  <mat-icon>flag</mat-icon>
+                  <input type="number" formControlName="targetAmount" placeholder="0.00" min="1" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Already Saved</label>
+                <div class="input-wrapper">
+                  <mat-icon>attach_money</mat-icon>
+                  <input type="number" formControlName="currentAmount" placeholder="0.00" min="0" />
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Target Date *</label>
+                <div class="input-wrapper">
+                  <mat-icon>calendar_today</mat-icon>
+                  <input type="date" formControlName="targetDate" />
+                </div>
+              </div>
+
+              <!-- Icon Picker -->
+              <div class="form-group full-width">
+                <label>Icon</label>
+                <div class="icon-grid">
+                  @for (ico of goalIcons; track ico) {
+                    <button type="button" class="ico-btn"
+                            [class.selected]="form.get('icon')?.value === ico"
+                            (click)="form.patchValue({icon: ico})">
+                      <mat-icon>{{ ico }}</mat-icon>
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <!-- Color Picker -->
+              <div class="form-group full-width">
+                <label>Color</label>
+                <div class="color-swatches">
+                  @for (c of goalColors; track c) {
+                    <button type="button" class="swatch"
+                            [style.background]="c"
+                            [class.active]="form.get('color')?.value === c"
+                            (click)="form.patchValue({color: c})">
+                    </button>
+                  }
+                </div>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cancel" (click)="showForm.set(false)">Cancel</button>
+              <button type="submit" class="btn-primary" [disabled]="form.invalid || saving()">
+                @if (saving()) { <mat-spinner diameter="16" /> }
+                Create Goal
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

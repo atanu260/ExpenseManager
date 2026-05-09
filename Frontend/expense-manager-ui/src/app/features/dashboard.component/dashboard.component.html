@@ -1,0 +1,196 @@
+<div class="dashboard fade-in">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Good {{ greeting() }}, {{ firstName() }}! 👋</h1>
+      <p class="page-subtitle">Financial overview for {{ monthLabel() }}</p>
+    </div>
+    <select class="month-select" [(ngModel)]="selMonth" (change)="loadDashboard()">
+      @for (m of months; track m; let i = $index) {
+        <option [value]="i + 1">{{ m }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="centered-spinner">
+      <mat-spinner diameter="44" />
+    </div>
+  }
+
+  @if (!loading() && summary()) {
+    @let s = summary()!;
+
+    <!-- Stat Cards -->
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg,#10b981,#059669)">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="stat-value">{{ s.totalIncome | currency:currency() }}</div>
+        <div class="stat-label">Total Income</div>
+        <div class="stat-change" [class.positive]="s.incomeChangePercent >= 0" [class.negative]="s.incomeChangePercent < 0">
+          <mat-icon>{{ s.incomeChangePercent >= 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+          {{ s.incomeChangePercent | number:'1.1-1' }}% vs last month
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg,#ef4444,#dc2626)">
+          <mat-icon>trending_down</mat-icon>
+        </div>
+        <div class="stat-value">{{ s.totalExpense | currency:currency() }}</div>
+        <div class="stat-label">Total Expenses</div>
+        <div class="stat-change" [class.positive]="s.expenseChangePercent < 0" [class.negative]="s.expenseChangePercent >= 0">
+          <mat-icon>{{ s.expenseChangePercent >= 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+          {{ s.expenseChangePercent | number:'1.1-1' }}% vs last month
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg,#6366f1,#4f46e5)">
+          <mat-icon>account_balance_wallet</mat-icon>
+        </div>
+        <div class="stat-value" [class.amount-income]="s.netBalance >= 0" [class.amount-expense]="s.netBalance < 0">
+          {{ s.netBalance | currency:currency() }}
+        </div>
+        <div class="stat-label">Net Balance</div>
+        <div class="stat-change positive">
+          <mat-icon>receipt_long</mat-icon>
+          {{ s.totalTransactions }} transactions
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg,#f59e0b,#d97706)">
+          <mat-icon>account_balance</mat-icon>
+        </div>
+        <div class="stat-value">{{ s.budgetUsedPercentage | number:'1.0-0' }}%</div>
+        <div class="stat-label">Budget Used</div>
+        <div class="progress-bar-wrapper mt-8">
+          <div class="progress-bar-fill"
+               [class]="s.budgetUsedPercentage >= 100 ? 'exceeded' : s.budgetUsedPercentage >= 80 ? 'warning' : 'safe'"
+               [style.width.%]="Math.min(s.budgetUsedPercentage, 100)">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+
+      <!-- Bar Chart -->
+      <div class="em-card chart-card">
+        <div class="card-header">
+          <h3>Income vs Expense Trends</h3>
+          <span class="chip">Last 6 months</span>
+        </div>
+        <div class="chart-area">
+          @if (barData()) {
+<canvas baseChart [data]="barData()!" [options]="barOptions" type="bar"></canvas>
+          }
+        </div>
+      </div>
+
+      <!-- Donut Chart -->
+      <div class="em-card chart-card small">
+        <div class="card-header">
+          <h3>Spending by Category</h3>
+        </div>
+        <div class="chart-area donut-area">
+          @if (donutData()) {
+<canvas baseChart [data]="donutData()!" [options]="donutOptions" type="doughnut"></canvas>
+          }
+        </div>
+        <div class="cat-legend">
+          @for (cat of s.topExpenseCategories.slice(0,5); track cat.categoryId) {
+            <div class="legend-row">
+              <span class="legend-dot" [style.background]="cat.color"></span>
+              <span class="legend-name">{{ cat.categoryName }}</span>
+              <span class="legend-pct">{{ cat.percentage }}%</span>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="bottom-row">
+
+      <!-- Recent Transactions -->
+      <div class="em-card">
+        <div class="card-header">
+          <h3>Recent Transactions</h3>
+          <a routerLink="/transactions" class="view-all">View All →</a>
+        </div>
+
+        @if (s.recentTransactions.length) {
+          <div class="tx-list">
+            @for (tx of s.recentTransactions; track tx.id) {
+              <div class="tx-item">
+                <div class="tx-icon" [style.background]="tx.categoryColor + '22'">
+                  <mat-icon [style.color]="tx.categoryColor">{{ tx.categoryIcon }}</mat-icon>
+                </div>
+                <div class="tx-info">
+                  <div class="tx-name">{{ tx.description || tx.categoryName }}</div>
+                  <div class="tx-meta">{{ tx.transactionDate | date:'MMM d, y' }} · {{ tx.paymentMethod }}</div>
+                </div>
+                <div [class.amount-income]="tx.type === 'Income'" [class.amount-expense]="tx.type === 'Expense'">
+                  {{ tx.type === 'Income' ? '+' : '-' }}{{ tx.amount | currency:currency() }}
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <mat-icon>receipt_long</mat-icon>
+            <p>No transactions yet</p>
+          </div>
+        }
+      </div>
+
+      <!-- Budget Status -->
+      <div class="em-card">
+        <div class="card-header">
+          <h3>Budget Status</h3>
+          <a routerLink="/budgets" class="view-all">Manage →</a>
+        </div>
+
+        @if (s.budgetStatuses.length) {
+          <div class="budget-status-list">
+            @for (b of s.budgetStatuses; track b.budgetId) {
+              <div class="bs-item">
+                <div class="bs-row">
+                  <span class="bs-name">{{ b.name }}</span>
+                  <span class="badge" [class]="b.status.toLowerCase()">{{ b.status }}</span>
+                </div>
+                <div class="bs-amounts">
+                  <span class="fw-600">{{ b.spentAmount | currency:currency() }}</span>
+                  <span class="text-secondary"> / {{ b.amount | currency:currency() }}</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                  <div class="progress-bar-fill"
+                       [class]="b.status.toLowerCase()"
+                       [style.width.%]="Math.min(b.percentage, 100)">
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <mat-icon>account_balance</mat-icon>
+            <p>No budgets set</p>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+
+</div>

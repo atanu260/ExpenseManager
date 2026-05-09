@@ -1,0 +1,25 @@
+<header class="app-header">
+
+  <div class="header-left">
+    <button class="menu-btn" (click)="toggleSidebar.emit()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="date-display">
+      <mat-icon>calendar_today</mat-icon>
+      <span>{{ currentDate }}</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="currency-chip">
+      <mat-icon>currency_exchange</mat-icon>
+      <span>{{ auth.currentUser()?.currency ?? 'USD' }}</span>
+    </div>
+
+    <div class="user-chip">
+      <div class="avatar">{{ userInitials() }}</div>
+      <span>{{ auth.currentUser()?.fullName }}</span>
+    </div>
+  </div>
+
+</header>
