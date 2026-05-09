@@ -1,0 +1,180 @@
+<div class="budgets-page fade-in">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Budgets</h1>
+      <p class="page-subtitle">Set limits and track your spending</p>
+    </div>
+    <button class="btn-primary" (click)="showForm.set(true)">
+      <mat-icon>add</mat-icon> New Budget
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="centered-spinner"><mat-spinner diameter="40" /></div>
+  } @else {
+    <div class="budgets-grid">
+
+      @for (b of budgets(); track b.id) {
+        <div class="budget-card em-card" [class.card-exceeded]="b.status === 'Exceeded'" [class.card-warning]="b.status === 'Warning'">
+
+          <!-- Card Header -->
+          <div class="bc-header">
+            <div class="bc-icon" [style.background]="(b.categoryColor || '#6366f1') + '22'">
+              <mat-icon [style.color]="b.categoryColor || '#6366f1'">
+                {{ b.categoryIcon || 'account_balance' }}
+              </mat-icon>
+            </div>
+            <div class="bc-meta">
+              <h4>{{ b.name }}</h4>
+              <span class="period-chip">{{ b.period }}</span>
+            </div>
+            <button class="icon-btn delete" (click)="deleteBudget(b.id)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+
+          <!-- Amounts -->
+          <div class="bc-amounts">
+            <div>
+              <div class="bc-spent">{{ b.spentAmount | currency:currency() }}</div>
+              <div class="bc-lbl">Spent</div>
+            </div>
+            <div class="bc-slash">/</div>
+            <div>
+              <div class="bc-total">{{ b.amount | currency:currency() }}</div>
+              <div class="bc-lbl">Budget</div>
+            </div>
+            <div class="bc-remaining-wrap">
+              <div class="bc-remaining" [class.negative]="b.remainingAmount < 0">
+                {{ b.remainingAmount | currency:currency() }}
+              </div>
+              <div class="bc-lbl">Remaining</div>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar-fill"
+                 [class]="b.status.toLowerCase()"
+                 [style.width.%]="Math.min(b.percentage, 100)">
+            </div>
+          </div>
+          <div class="bc-progress-row">
+            <span>{{ b.percentage | number:'1.0-0' }}% used</span>
+            <span class="badge" [class]="b.status.toLowerCase()">{{ b.status }}</span>
+          </div>
+
+          <!-- Dates -->
+          <div class="bc-dates">
+            <mat-icon>date_range</mat-icon>
+            {{ b.startDate | date:'MMM d' }} — {{ b.endDate | date:'MMM d, y' }}
+          </div>
+
+        </div>
+      }
+
+      <!-- Add Card -->
+      <div class="add-budget-card" (click)="showForm.set(true)">
+        <mat-icon>add_circle_outline</mat-icon>
+        <p>Create New Budget</p>
+      </div>
+
+    </div>
+  }
+
+  <!-- Modal -->
+  @if (showForm()) {
+    <div class="modal-overlay" (click)="showForm.set(false)">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Create Budget</h3>
+          <button class="close-btn" (click)="showForm.set(false)"><mat-icon>close</mat-icon></button>
+        </div>
+
+        <div class="modal-body">
+          <form [formGroup]="form" (ngSubmit)="saveBudget()">
+
+            <div class="form-grid">
+
+              <div class="form-group full-width">
+                <label>Budget Name *</label>
+                <div class="input-wrapper">
+                  <mat-icon>label</mat-icon>
+                  <input formControlName="name" placeholder="e.g. Monthly Food Budget" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Amount *</label>
+                <div class="input-wrapper">
+                  <mat-icon>attach_money</mat-icon>
+                  <input type="number" formControlName="amount" placeholder="0.00" min="1" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Period *</label>
+                <div class="input-wrapper">
+                  <mat-icon>repeat</mat-icon>
+                  <select formControlName="period">
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Category (optional)</label>
+                <div class="input-wrapper">
+                  <mat-icon>category</mat-icon>
+                  <select formControlName="categoryId">
+                    <option value="">All Categories</option>
+                    @for (c of expenseCategories(); track c.id) {
+                      <option [value]="c.id">{{ c.name }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Start Date *</label>
+                <div class="input-wrapper">
+                  <mat-icon>calendar_today</mat-icon>
+                  <input type="date" formControlName="startDate" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>End Date *</label>
+                <div class="input-wrapper">
+                  <mat-icon>event</mat-icon>
+                  <input type="date" formControlName="endDate" />
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Alert at {{ form.get('alertThreshold')?.value }}% usage</label>
+                <input type="range" formControlName="alertThreshold" min="50" max="95" step="5" class="range-slider" />
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cancel" (click)="showForm.set(false)">Cancel</button>
+              <button type="submit" class="btn-primary" [disabled]="form.invalid || saving()">
+                @if (saving()) { <mat-spinner diameter="16" /> }
+                Create Budget
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

@@ -33,17 +33,17 @@ export interface Transaction {
   type: 'Income' | 'Expense';
   description?: string;
   notes?: string;
-  transactionDate: Date;
+  transactionDate: Date | string;
   paymentMethod: string;
   tags?: string;
   isRecurring: boolean;
-  createdAt: Date;
+  createdAt: Date | string;
 }
 
 export interface TransactionFilter {
   startDate?: string;
   endDate?: string;
-  categoryId?: number;
+  categoryId?: number | string;
   type?: string;
   paymentMethod?: string;
   minAmount?: number;
@@ -107,8 +107,8 @@ export interface Budget {
   remainingAmount: number;
   percentage: number;
   period: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   alertThreshold: number;
   isActive: boolean;
   status: 'Safe' | 'Warning' | 'Exceeded';
@@ -128,8 +128,9 @@ export interface SavingsGoal {
   name: string;
   targetAmount: number;
   currentAmount: number;
-  targetDate: Date;
+  targetDate: Date | string;
   icon: string;
   color: string;
   isCompleted: boolean;
+  createdAt?: Date | string;
 }

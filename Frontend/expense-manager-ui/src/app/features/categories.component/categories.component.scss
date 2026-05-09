@@ -1,0 +1,87 @@
+.type-section { margin-bottom: 36px; }
+
+.section-heading {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  h3 { font-size: 15px; font-weight: 700; }
+}
+
+.section-dot    { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.count-chip     { background: #f1f5f9; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.cat-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  position: relative;
+}
+
+.cat-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  mat-icon { font-size: 22px; }
+}
+
+.cat-info { flex: 1; min-width: 0; }
+
+.cat-name {
+  font-size: 13px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.cat-type-badge {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px;
+  display: inline-block;
+}
+
+.cat-actions { display: flex; gap: 4px; }
+
+.system-chip {
+  font-size: 10px; background: #f1f5f9; color: var(--text-secondary);
+  padding: 2px 8px; border-radius: 4px; font-weight: 600;
+}
+
+// ─── Modal extras ─────────────────────────────────────────
+.modal-sm { width: 460px; }
+
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+
+.color-pick-row { display: flex; align-items: center; gap: 12px; }
+
+.color-input {
+  width: 48px; height: 42px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 2px; cursor: pointer; background: transparent;
+}
+
+.color-hex { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+
+.icon-preview { display: flex; align-items: center; gap: 10px; }
+
+.icon-preview-box {
+  width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  mat-icon { font-size: 24px; }
+}
+
+.icon-grid {
+  display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px;
+  @media (max-width: 480px) { grid-template-columns: repeat(6, 1fr); }
+}
+
+.ico-btn {
+  width: 36px; height: 36px; border: 2px solid transparent;
+  border-radius: 8px; background: #f8fafc;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  mat-icon { font-size: 18px; color: var(--text-secondary); }
+  &:hover { background: #f1f5f9; }
+  &.selected { background: rgba(99,102,241,0.06); }
+}
