@@ -8,7 +8,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
-  private readonly API = 'http://localhost:5000/api/transactions';
+  private readonly API = 'https://localhost:7045/api/transactions';
   private http = inject(HttpClient);
 
   getAll(filter: Partial<TransactionFilter>): Observable<PagedResult<Transaction>> {

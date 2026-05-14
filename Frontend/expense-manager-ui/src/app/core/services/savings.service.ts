@@ -5,7 +5,7 @@ import { SavingsGoal } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class SavingsService {
-  private readonly API = 'http://localhost:5000/api/savings';
+  private readonly API = 'https://localhost:7045/api/savings';
   private http = inject(HttpClient);
 
   getAll(): Observable<SavingsGoal[]> {
