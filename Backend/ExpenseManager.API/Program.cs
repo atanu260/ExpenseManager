@@ -1,9 +1,11 @@
 using System.Text;
+using ExpenseManager.API;
 using ExpenseManager.Core.Interfaces;
 using ExpenseManager.Infrastructure.Data;
 using ExpenseManager.Infrastructure.Repositories;
 using ExpenseManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -19,6 +21,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBudgetRepository, BudgetRepository>();
+
+// Rate Limiting
+builder.AddRateLimitingPolicies();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -75,6 +80,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseRateLimiter();
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
