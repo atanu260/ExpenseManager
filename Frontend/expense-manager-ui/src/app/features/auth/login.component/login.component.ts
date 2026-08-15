@@ -14,10 +14,10 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  private fb      = inject(FormBuilder);
-  private auth    = inject(AuthService);
-  private router  = inject(Router);
-  private toastr  = inject(ToastrService);
+  private readonly fb      = inject(FormBuilder);
+  private readonly auth    = inject(AuthService);
+  private readonly router  = inject(Router);
+  private readonly toastr  = inject(ToastrService);
 
   loading      = signal(false);
   showPassword = signal(false);

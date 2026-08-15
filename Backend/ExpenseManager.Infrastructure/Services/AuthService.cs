@@ -1,14 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using BCrypt.Net;
-using ExpenseManager.Core.DTOs.Auth;
+﻿using ExpenseManager.Core.DTOs.Auth;
 using ExpenseManager.Core.Interfaces;
 using ExpenseManager.Core.Models;
 using ExpenseManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ExpenseManager.Infrastructure.Services;
 

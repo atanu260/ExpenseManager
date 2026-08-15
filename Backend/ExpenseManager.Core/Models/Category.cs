@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-namespace ExpenseManager.Core.Models;
+﻿namespace ExpenseManager.Core.Models;
 
 public class Category
 {

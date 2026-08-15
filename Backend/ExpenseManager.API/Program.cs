@@ -1,4 +1,4 @@
-using System.Text;
+using ExpenseManager.API;
 using ExpenseManager.Core.Interfaces;
 using ExpenseManager.Infrastructure.Data;
 using ExpenseManager.Infrastructure.Repositories;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBudgetRepository, BudgetRepository>();
+
+// Rate Limiting
+builder.AddRateLimitingPolicies();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -42,10 +46,10 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
-        policy.WithOrigins("http://localhost:4200")
+        policy.AllowAnyOrigin()
               .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials());
+              .AllowAnyHeader());
+
 });
 
 // Swagger
@@ -75,6 +79,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseRateLimiter();
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -87,4 +92,4 @@ using (var scope = app.Services.CreateScope())
     await db.Database.MigrateAsync();
 }
 
-app.Run();
+await app.RunAsync();
