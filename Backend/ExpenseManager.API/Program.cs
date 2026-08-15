@@ -1,14 +1,13 @@
-using System.Text;
 using ExpenseManager.API;
 using ExpenseManager.Core.Interfaces;
 using ExpenseManager.Infrastructure.Data;
 using ExpenseManager.Infrastructure.Repositories;
 using ExpenseManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +49,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader());
-              
+
 });
 
 // Swagger

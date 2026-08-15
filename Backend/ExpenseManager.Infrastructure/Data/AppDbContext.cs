@@ -23,13 +23,15 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // User
-        modelBuilder.Entity<User>(e => {
+        modelBuilder.Entity<User>(e =>
+        {
             e.HasIndex(u => u.Email).IsUnique();
             e.Property(u => u.MonthlyBudget).HasPrecision(18, 2);
         });
 
         // Category
-        modelBuilder.Entity<Category>(e => {
+        modelBuilder.Entity<Category>(e =>
+        {
             e.HasOne(c => c.User)
              .WithMany(u => u.Categories)
              .HasForeignKey(c => c.UserId)
@@ -37,7 +39,8 @@ public class AppDbContext : DbContext
         });
 
         // Transaction
-        modelBuilder.Entity<Transaction>(e => {
+        modelBuilder.Entity<Transaction>(e =>
+        {
             e.Property(t => t.Amount).HasPrecision(18, 2);
             e.HasOne(t => t.User)
              .WithMany(u => u.Transactions)
@@ -50,7 +53,8 @@ public class AppDbContext : DbContext
         });
 
         // Budget
-        modelBuilder.Entity<Budget>(e => {
+        modelBuilder.Entity<Budget>(e =>
+        {
             e.Property(b => b.Amount).HasPrecision(18, 2);
             e.Property(b => b.SpentAmount).HasPrecision(18, 2);
             e.HasOne(b => b.User)
@@ -64,7 +68,8 @@ public class AppDbContext : DbContext
         });
 
         // SavingsGoal
-        modelBuilder.Entity<SavingsGoal>(e => {
+        modelBuilder.Entity<SavingsGoal>(e =>
+        {
             e.Property(s => s.TargetAmount).HasPrecision(18, 2);
             e.Property(s => s.CurrentAmount).HasPrecision(18, 2);
             e.HasOne(s => s.User)
